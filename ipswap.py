@@ -20,11 +20,12 @@ def backup(server): # backup all networking related files, iterate w/ src / dst
 		subprocess.call(tarballs, shell=True)
 
 def removehw(): # rewrites ifcfg w/o hwaddr/uuid
-	ifcfg = open("/etc/sysconfig/network-scripts/ifcfg-eth0","r+")
+	ifcfg = open("/etc/sysconfig/network-scripts/ifcfg-eth0","r")
 	lines = ifcfg.readlines()
+	ifcfg = open("/etc/sysconfig/network-scripts/ifcfg-eth0","w")
 	for line in lines:
-		if ("HWADDR" not in line or "UUID" not in line):
-			ifcfg.write(line)
+        	if not ("HWADDR" or "UUID") in line:
+                	ifcfg.write(line)
 	ifcfg.close()
 
 def sshkeys(sourceport, sourceip): # create and apply sshkeys
